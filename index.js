@@ -8,14 +8,28 @@ const typeDefs = gql`
     friends: [User!]!
   }
 
+  type Shoes {
+    name: String!
+    price: Int!
+  }
+
   input UserInput {
     email: String
+  }
+
+  input ShoesInput {
+    name: String!
+    price: Int!
   }
 
   type Query {
     #   me query returns User Type
     me: User!
     user(input: UserInput!): User
+  }
+
+  type Mutation {
+    newShoes(input: ShoesInput!): Shoes!
   }
 `;
 
@@ -35,6 +49,12 @@ const resolvers = {
       return {
         email: 'mahmedmushtaq296@gmail.com',
       };
+    },
+  },
+
+  Mutation: {
+    newShoes(_, { input }) {
+      return input;
     },
   },
   // this is used to override parent value of resolver
