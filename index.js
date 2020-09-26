@@ -6,18 +6,19 @@ const typeDefs = gql`
     CHAPPAL
     SHOES
   }
-  
 
   type User {
     email: String!
     avatar: String
     friends: [User!]!
+    shoes: [Shoes]
   }
 
   type Shoes {
     name: String!
     price: Int!
     type: ShoeType
+    user: User
   }
 
   input UserInput {
@@ -33,7 +34,7 @@ const typeDefs = gql`
   type Query {
     #   me query returns User Type
     me: User!
-    user(input: UserInput!): User
+    user(input: UserInput): User
   }
 
   type Mutation {
@@ -56,6 +57,7 @@ const resolvers = {
       console.log('user id = ', input);
       return {
         email: 'mahmedmushtaq296@gmail.com',
+        shoesIds: [1, 2, 3],
       };
     },
   },
@@ -66,11 +68,18 @@ const resolvers = {
     },
   },
   // this is used to override parent value of resolver
-  // User: {
-  //   email(User) {
-  //     console.log('type is = ', type);
-  //   },
-  // },
+  User: {
+    shoes(user) {
+      // here get all user.shoesId and get all shoes By this shoes id from db
+      console.log(user);
+      return [
+        {
+          name: 'Test shoes',
+          type: 'Cat',
+        },
+      ];
+    },
+  },
 };
 
 const server = new ApolloServer({
